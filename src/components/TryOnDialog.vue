@@ -113,7 +113,6 @@
     </div>
 
     <!-- 额度提示 -->
-      <span/>
     <div v-if="isLoggedIn" class="quota-hint">
       <el-icon><MagicStick /></el-icon>
       <span>剩余试衣次数: <strong>{{ userQuota }}</strong></span>
@@ -226,17 +225,22 @@ const handleCancel = () => {
 }
 
 const handleConfirm = async () => {
-  if (!isLoggedIn.value) {
+  const isLoggedIn = !!localStorage.getItem('user_id')
+  if (!isLoggedIn) {
     try {
-      await ElMessageBox.confirm('请先登录后再使用试衣功能', '提示', {
-        confirmButtonText: '去登录',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
+      await ElMessageBox.confirm(
+        '您需要先登录才能体验 AI 虚拟试衣功能',
+        '提示',
+        {
+          confirmButtonText: '去登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
       visible.value = false
       router.push('/login')
-    } catch {
-      // 用户取消
+    } catch (error) {
+      // 用户取消登录
     }
     return
   }
@@ -294,6 +298,46 @@ const getFileUrl = (fileId) => {
 </script>
 
 <style scoped>
+/* 未登录提示样式，与橱窗页面保持一致 */
+.login-prompt-section {
+  padding: 60px 0;
+  text-align: center;
+}
+
+.login-prompt-card {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.prompt-icon {
+  font-size: 72px;
+  color: var(--color-primary);
+  margin-bottom: 24px;
+}
+
+.prompt-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.prompt-desc {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  margin-bottom: 32px;
+}
+
+.login-prompt-card .login-btn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #8B5CF6 100%);
+  border: none;
+  border-radius: var(--radius-button);
+  padding: 12px 36px;
+  font-size: 16px;
+}
+
 .tryon-dialog :deep(.el-dialog) {
   display: flex;
   flex-direction: column;

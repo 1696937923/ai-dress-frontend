@@ -95,6 +95,7 @@
       </div>
     </section>
 
+    <!-- 试衣功能区域 -->
     <!-- Try-On Dialog -->
     <TryOnDialog
       v-model="showTryOnDialog"
@@ -104,7 +105,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import TryOnDialog from '../components/TryOnDialog.vue'
@@ -113,6 +114,14 @@ const router = useRouter()
 
 const showTryOnDialog = ref(false)
 const resultUrl = ref('')
+
+const isLoggedIn = computed(() => {
+  return !!localStorage.getItem('user_id')
+})
+
+const goToLogin = () => {
+  router.push('/login')
+}
 
 const galleryItems = ref([
   { icon: '🌸', title: '春日浪漫', desc: '轻盈碎花，温柔绽放', color: 'linear-gradient(135deg, #FFE5EC 0%, #FFC3D0 100%)' },
@@ -124,21 +133,24 @@ const galleryItems = ref([
 ])
 
 const openTryOnDialog = async () => {
-  const userId = localStorage.getItem('user_id')
-  if (!userId) {
+  if (!isLoggedIn.value) {
     try {
-      await ElMessageBox.confirm('请先登录后再使用试衣功能', '提示', {
-        confirmButtonText: '去登录',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-      router.push('/login')
-    } catch {
-      // 用户取消
+      await ElMessageBox.confirm(
+        '您需要先登录才能体验 AI 虚拟试衣功能',
+        '提示',
+        {
+          confirmButtonText: '去登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
+      goToLogin()
+    } catch (error) {
+      // 用户取消登录
     }
-    return
+  } else {
+    showTryOnDialog.value = true
   }
-  showTryOnDialog.value = true
 }
 
 const goToWardrobe = () => {
@@ -164,6 +176,46 @@ const downloadResult = () => {
 <style scoped>
 .home {
   padding-bottom: 80px;
+}
+
+/* 未登录提示样式，与橱窗页面保持一致 */
+.login-prompt-section {
+  padding: 60px 0;
+  text-align: center;
+}
+
+.login-prompt-card {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.prompt-icon {
+  font-size: 72px;
+  color: var(--color-primary);
+  margin-bottom: 24px;
+}
+
+.prompt-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.prompt-desc {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  margin-bottom: 32px;
+}
+
+.login-prompt-card .login-btn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #8B5CF6 100%);
+  border: none;
+  border-radius: var(--radius-button);
+  padding: 12px 36px;
+  font-size: 16px;
 }
 
 /* Hero Section */

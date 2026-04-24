@@ -216,6 +216,7 @@ const getFileUrl = (fileId) => {
 
 .login-prompt-section {
   padding: 60px 0;
+  text-align: center;
 }
 
 .login-prompt-card {
@@ -342,4 +343,53 @@ const getFileUrl = (fileId) => {
 .photo-name {
   font-size: 15px;
   font-weight: 600;
-  color: var(--color-text-prim
+  color: var(--color-text-primary);
+}
+
+.upload-card {
+  height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--color-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upload-card:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.upload-card-content {
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+
+.upload-text {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--color-text-secondary);
+}
+
+.empty-icon {
+  font-size: 72px;
+  margin-bottom: 24px;
+  color: var(--color-primary-light);
+}
+
+.empty-text {
+  font-size: 18px;
+}
+</style>

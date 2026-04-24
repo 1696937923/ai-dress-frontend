@@ -12,6 +12,18 @@
           <p>加载中...</p>
         </div>
 
+        <div v-if="!isLoggedIn" class="login-prompt-section">
+          <div class="login-prompt-card card">
+            <el-icon class="prompt-icon"><Lock /></el-icon>
+            <h3 class="prompt-title">请先登录</h3>
+            <p class="prompt-desc">登录后即可查看试衣记录</p>
+            <el-button type="primary" class="login-btn" @click="goToLogin">
+              <el-icon><User /></el-icon>
+              去登录
+            </el-button>
+          </div>
+        </div>
+
         <div v-else-if="tasks.length === 0" class="empty-state">
           <el-icon class="empty-icon"><Clock /></el-icon>
           <p class="empty-text">还没有试衣记录，快去体验AI试衣吧！</p>
@@ -119,11 +131,19 @@ const loading = ref(false)
 const tasks = ref([])
 const showPreview = ref(false)
 const previewUrl = ref('')
+const isLoggedIn = ref(!!localStorage.getItem('user_id'))
 
 const loadTasks = async () => {
+  const isLoggedIn = !!localStorage.getItem('user_id')
+  if (!isLoggedIn) {
+    loading.value = false
+    tasks.value = []
+    return
+  }
+
   loading.value = true
   try {
-    const res = await getAllTasks()
+    const res = await getAllTasks(localStorage.getItem('user_id'))
     if (res.data.code === 200) {
       tasks.value = res.data.data
     } else {
@@ -218,6 +238,10 @@ const goToHome = () => {
   router.push('/')
 }
 
+const goToLogin = () => {
+  router.push('/login')
+}
+
 const getStatusClass = (status) => {
   const classes = {
     'PROCESSING': 'status-processing',
@@ -244,6 +268,46 @@ onMounted(() => {
 <style scoped>
 .history-page {
   padding: 60px 0 80px;
+}
+
+/* 未登录提示样式，与其他页面保持一致 */
+.login-prompt-section {
+  padding: 60px 0;
+  text-align: center;
+}
+
+.login-prompt-card {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.prompt-icon {
+  font-size: 72px;
+  color: var(--color-primary);
+  margin-bottom: 24px;
+}
+
+.prompt-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.prompt-desc {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  margin-bottom: 32px;
+}
+
+.login-prompt-card .login-btn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #8B5CF6 100%);
+  border: none;
+  border-radius: var(--radius-button);
+  padding: 12px 36px;
+  font-size: 16px;
 }
 
 .page-header {

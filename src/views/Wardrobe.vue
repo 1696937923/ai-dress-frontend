@@ -437,6 +437,7 @@ const getFileUrl = (fileId) => {
 
 .login-prompt-section {
   padding: 60px 0;
+  text-align: center;
 }
 
 .login-prompt-card {
@@ -700,4 +701,64 @@ const getFileUrl = (fileId) => {
 .dialog-desc {
   text-align: center;
   font-size: 15px;
-  color: var(--color-text-seconda
+  color: var(--color-text-secondary);
+  margin-bottom: 30px;
+}
+
+.category-options {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.category-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  background: var(--color-bg);
+}
+
+.category-option:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.category-option.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.option-icon {
+  font-size: 32px;
+}
+
+.option-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancel-btn {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #8B5CF6 100%);
+  border: none;
+}
+</style>

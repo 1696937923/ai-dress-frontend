@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
@@ -61,12 +61,10 @@ const router = useRouter()
 
 const userName = ref('')
 const userQuota = ref(0)
-
-const isLoggedIn = computed(() => {
-  return !!localStorage.getItem('user_id')
-})
+const isLoggedIn = ref(false)
 
 const loadUserInfo = () => {
+  isLoggedIn.value = !!localStorage.getItem('user_id')
   const name = localStorage.getItem('user_name')
   const quota = localStorage.getItem('user_quota')
   if (name) userName.value = name
@@ -77,6 +75,7 @@ const handleLogout = () => {
   localStorage.removeItem('user_id')
   localStorage.removeItem('user_name')
   localStorage.removeItem('user_quota')
+  isLoggedIn.value = false
   userName.value = ''
   userQuota.value = 0
   ElMessage.success('已退出登录')
@@ -94,6 +93,13 @@ onMounted(() => {
 
 // 监听存储变化
 window.addEventListener('storage', loadUserInfo)
+
+// 监听自定义事件，用于登录后刷新用户信息
+const handleAuthStateChanged = () => {
+  loadUserInfo()
+}
+
+window.addEventListener('auth-state-changed', handleAuthStateChanged)
 </script>
 
 <style scoped>
